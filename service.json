@@ -1,134 +1,115 @@
 {
-  "id": "echo-service",
-  "name": "Echo Service",
-  "description": "Minimal sample service used to prove the service-template contract.",
+  "$schema": "https://service-lasso.dev/schemas/service.schema.json",
+  "id": "websight-cms",
+  "name": "Websight CMS",
+  "description": "Release-backed Websight CMS service for app-owned local CMS authoring.",
+  "version": "1.0.0",
   "enabled": true,
-  "version": "0.1.0",
-  "logoutput": true,
-  "icon": [
+  "execservice": "@java",
+  "ports": {
+    "service": 8113,
+    "debug": 8115
+  },
+  "env": {
+    "SERVICE_HOME": "${SERVICE_ARTIFACT_ROOT}",
+    "SERVICE_DATA_PATH": "${SERVICE_ROOT}/server/data",
+    "PUBLISH_DOCROOT": "${SERVICE_DATA_PATH}/docroot",
+    "FLOW_HOST_URL": "http://127.0.0.1:${FLOW_PORT}",
+    "FLOW_TMS_URL": "ws://127.0.0.1:${MESSAGESERVICE_PORT}/$tms",
+    "FLOW_WS_URL": "ws://127.0.0.1:${FLOW_PORT}/flows/%s",
+    "FLOW_DESIGNER_URL": "http://127.0.0.1:${FLOW_PORT}/designer/?darkmode=%s&socket=%s&components=%s",
+    "MONGO_DB_URL": "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}",
+    "CMS_PORT": "${SERVICE_PORT}",
+    "CMS_DEBUG_PORT": "${SERVICE_PORT_DEBUG}",
+    "CMS_URL": "http://127.0.0.1:${SERVICE_PORT}",
+    "CMS_URL_AUTH": "http://127.0.0.1:${SERVICE_PORT}/apps/websight-authentication/login.html",
+    "CMS_CACHE_PATH_ESC": "${SERVICE_DATA_PATH}/docroot"
+  },
+  "globalenv": {
+    "CMS_PORT": "${CMS_PORT}",
+    "CMS_DEBUG_PORT": "${CMS_DEBUG_PORT}",
+    "CMS_URL": "${CMS_URL}",
+    "CMS_URL_AUTH": "${CMS_URL_AUTH}",
+    "CMS_CACHE_PATH_ESC": "${CMS_CACHE_PATH_ESC}"
+  },
+  "urls": [
     {
-      "provider": "lucide",
-      "name": "terminal"
+      "label": "Websight CMS",
+      "url": "${CMS_URL}/",
+      "kind": "local"
+    },
+    {
+      "label": "Websight Login",
+      "url": "${CMS_URL_AUTH}",
+      "kind": "local"
+    },
+    {
+      "label": "health",
+      "url": "${CMS_URL}/system/health",
+      "kind": "local"
     }
   ],
-  "servicetype": 50,
-  "servicelocation": 10,
-  "logo": [],
-  "logs": {
-    "default": {
-      "path": "logs/echo-service.log"
-    }
-  },
-  "meta": {
-    "developers": [
-      {
-        "name": "Service Lasso contributors"
-      }
-    ],
-    "license": "Apache-2.0",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/service-lasso/service-template.git"
-    },
-    "websiteUrl": "https://github.com/service-lasso/service-template",
-    "documentationUrl": "https://github.com/service-lasso/service-template/blob/main/README.md",
-    "issuesUrl": "https://github.com/service-lasso/service-template/issues",
-    "support": {
-      "issuesUrl": "https://github.com/service-lasso/service-template/issues"
-    },
-    "links": {
-      "repository": "https://github.com/service-lasso/service-template",
-      "issues": "https://github.com/service-lasso/service-template/issues",
-      "documentation": "https://github.com/service-lasso/service-template/blob/main/README.md"
-    },
-    "tags": [
-      "service-lasso",
-      "template",
-      "example-service"
-    ]
-  },
   "artifact": {
     "kind": "archive",
     "source": {
       "type": "github-release",
-      "repo": "service-lasso/service-template",
+      "repo": "service-lasso/lasso-websight-cms",
       "channel": "latest"
     },
     "platforms": {
       "win32": {
-        "assetName": "echo-service-win32.zip",
-        "archiveType": "zip",
-        "command": "./echo-service.exe",
-        "args": []
-      },
-      "darwin": {
-        "assetName": "echo-service-darwin.tar.gz",
-        "archiveType": "tar.gz",
-        "command": "./echo-service",
-        "args": []
+        "assetName": "lasso-websight-cms-1.0.0-win32.zip",
+        "archiveType": "zip"
       },
       "linux": {
-        "assetName": "echo-service-linux.tar.gz",
-        "archiveType": "tar.gz",
-        "command": "./echo-service",
-        "args": []
+        "assetName": "lasso-websight-cms-1.0.0-linux.tar.gz",
+        "archiveType": "tar.gz"
       },
-      "default": {
-        "assetName": "echo-service-win32.zip",
-        "archiveType": "zip",
-        "command": "./echo-service.exe",
-        "args": []
+      "darwin": {
+        "assetName": "lasso-websight-cms-1.0.0-darwin.tar.gz",
+        "archiveType": "tar.gz"
       }
     }
   },
-  "actions": {
-    "install": {
-      "description": "Acquire or unpack the packaged echo-service runtime artifact.",
-      "mode": "converge-install",
-      "idempotent": true
-    },
-    "config": {
-      "description": "Materialize deployment-local echo-service config and env values.",
-      "mode": "converge-config",
-      "idempotent": true
-    },
-    "update": {
-      "description": "Apply a newer release artifact and reconcile update-time changes before restart.",
-      "mode": "converge-update",
-      "idempotent": true
-    },
-    "start": {
-      "description": "Start the sample echo service.",
-      "mode": "runtime-start",
-      "idempotent": true
-    },
-    "stop": {
-      "description": "Stop the sample echo service gracefully.",
-      "mode": "runtime-stop",
-      "idempotent": true
-    },
-    "restart": {
-      "description": "Restart the sample echo service after config or update changes.",
-      "mode": "runtime-restart",
-      "idempotent": false
-    },
-    "rollback": {
-      "description": "Restore the previously deployed artifact if an update fails validation.",
-      "mode": "state-rollback",
-      "idempotent": false
-    }
+  "commandline": {
+    "win32": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${SERVICE_PORT_DEBUG} --add-opens java.base/java.lang=ALL-UNNAMED -jar \"${SERVICE_ARTIFACT_ROOT}/config/org.apache.sling.feature.launcher.jar\" -c \"${SERVICE_ARTIFACT_ROOT}/config/cache\" -CC \"org.apache.sling.commons.log.LogManager=MERGE_LATEST\" -D oak.mongo.uri=\"${MONGO_DB_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.host.url=\"${FLOW_HOST_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.ws.url=\"${FLOW_WS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.tms.url=\"${FLOW_TMS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.designer.url=\"${FLOW_DESIGNER_URL}\" -D org.osgi.service.http.port=${SERVICE_PORT} -p \"${SERVICE_ROOT}/server/home\" -f \"${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-typerefinery-websight.slingosgifeature,${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-docker.slingosgifeature\"",
+    "linux": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${SERVICE_PORT_DEBUG} --add-opens java.base/java.lang=ALL-UNNAMED -jar \"${SERVICE_ARTIFACT_ROOT}/config/org.apache.sling.feature.launcher.jar\" -c \"${SERVICE_ARTIFACT_ROOT}/config/cache\" -CC \"org.apache.sling.commons.log.LogManager=MERGE_LATEST\" -D oak.mongo.uri=\"${MONGO_DB_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.host.url=\"${FLOW_HOST_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.ws.url=\"${FLOW_WS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.tms.url=\"${FLOW_TMS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.designer.url=\"${FLOW_DESIGNER_URL}\" -D org.osgi.service.http.port=${SERVICE_PORT} -p \"${SERVICE_ROOT}/server/home\" -f \"${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-typerefinery-websight.slingosgifeature,${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-docker.slingosgifeature\"",
+    "darwin": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${SERVICE_PORT_DEBUG} --add-opens java.base/java.lang=ALL-UNNAMED -jar \"${SERVICE_ARTIFACT_ROOT}/config/org.apache.sling.feature.launcher.jar\" -c \"${SERVICE_ARTIFACT_ROOT}/config/cache\" -CC \"org.apache.sling.commons.log.LogManager=MERGE_LATEST\" -D oak.mongo.uri=\"${MONGO_DB_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.host.url=\"${FLOW_HOST_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.ws.url=\"${FLOW_WS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.tms.url=\"${FLOW_TMS_URL}\" -D ai.typerefinery.websight.services.flow.FlowService.flow.designer.url=\"${FLOW_DESIGNER_URL}\" -D org.osgi.service.http.port=${SERVICE_PORT} -p \"${SERVICE_ROOT}/server/home\" -f \"${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-typerefinery-websight.slingosgifeature,${SERVICE_ARTIFACT_ROOT}/config/cache/ai/typerefinery/websight/typerefinery-distribution/1.0.0-SNAPSHOT/typerefinery-distribution-1.0.0-SNAPSHOT-docker.slingosgifeature\""
   },
-  "execconfig": {
-    "serviceorder": 100,
-    "serviceport": 0,
-    "execcwd": "runtime",
-    "executable": "echo-service",
-    "env": {
-      "ECHO_MESSAGE": "hello from service-template"
-    },
-    "depend_on": [],
-    "healthcheck": {
-      "type": "process"
-    }
+  "install": {
+    "files": [
+      {
+        "path": "./server/data/.keep",
+        "content": ""
+      },
+      {
+        "path": "./server/data/docroot/.keep",
+        "content": ""
+      },
+      {
+        "path": "./server/home/.keep",
+        "content": ""
+      }
+    ]
+  },
+  "healthcheck": {
+    "type": "http",
+    "url": "${CMS_URL}/system/health",
+    "expected_status": 200,
+    "retries": 180,
+    "interval": 1000
+  },
+  "depend_on": [
+    "@java",
+    "mongo",
+    "nginx",
+    "totaljs-flow",
+    "totaljs-messageservice"
+  ],
+  "updates": {
+    "enabled": true,
+    "mode": "notify",
+    "track": "latest",
+    "checkIntervalSeconds": 86400
   }
 }
