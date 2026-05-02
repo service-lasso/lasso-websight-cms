@@ -45,7 +45,16 @@ npm test
 
 The default verifier builds all release archives and validates the manifest, package metadata, bundled config, feature files, dependency list, ports, environment contract, and release suitability constraints.
 
-Live start validation is intentionally separate because Websight CMS requires running Java, MongoDB, NGINX, Total.js Flow, and Total.js Message Service services together. Use a Service Lasso consumer workspace that includes those service manifests for full lifecycle validation.
+Live start validation is intentionally separate because Websight CMS requires running Java, MongoDB, NGINX, Total.js Flow, and Total.js Message Service services together:
+
+```powershell
+$env:SERVICE_LASSO_REPO = "C:\projects\service-lasso\service-lasso"
+npm run verify:live
+```
+
+The live verifier creates a consumer-style workspace under `output/live-stack/<platform>`, installs/configures/starts the full stack through Service Lasso lifecycle code, checks the exported CMS health/root/login URLs, restarts Websight CMS, stops it, and then stops the remaining services.
+
+See [docs/live-stack-validation.md](docs/live-stack-validation.md).
 
 ## Licensing And Release Suitability
 
