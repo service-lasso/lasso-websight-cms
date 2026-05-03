@@ -48,7 +48,7 @@ The default verifier builds all release archives and validates the manifest, pac
 Live start validation is intentionally separate because Websight CMS requires running Java, MongoDB, NGINX, Total.js Flow, and Total.js Message Service services together:
 
 ```powershell
-$env:SERVICE_LASSO_REPO = "C:\projects\service-lasso\service-lasso"
+$env:SERVICE_LASSO_REPO = "<path-to-your-service-lasso-repo>"
 npm run verify:live
 ```
 
