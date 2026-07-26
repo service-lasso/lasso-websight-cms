@@ -26,7 +26,7 @@ Release artifacts are:
 - Runtime provider: `@java`
 - Dependencies: `@java`, `mongo`, `nginx`, `totaljs-flow`, `totaljs-messageservice`
 - Data path: `server/data`
-- HTTP healthcheck: `GET /system/health`
+- HTTP health check: `GET /system/health`
 
 The service exports:
 
@@ -43,7 +43,7 @@ npm install
 npm test
 ```
 
-The default verifier builds all release archives and validates the manifest, package metadata, bundled config, feature files, dependency list, ports, environment contract, and release suitability constraints.
+The default verifier builds all release archives and validates the canonical `healthchecks[]` manifest contract, package metadata, bundled config, feature files, dependency list, ports, environment contract, and release suitability constraints.
 
 Live start validation is intentionally separate because Websight CMS requires running Java, MongoDB, NGINX, Total.js Flow, and Total.js Message Service services together:
 

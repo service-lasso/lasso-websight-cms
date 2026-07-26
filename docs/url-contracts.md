@@ -11,7 +11,7 @@
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `GET` | `/system/health` | Service Lasso HTTP healthcheck |
+| `GET` | `/system/health` | Service Lasso HTTP health check |
 
 ## Runtime State
 

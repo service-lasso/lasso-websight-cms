@@ -92,13 +92,16 @@
       }
     ]
   },
-  "healthcheck": {
-    "type": "http",
-    "url": "${CMS_URL}/system/health",
-    "expected_status": 200,
-    "retries": 180,
-    "interval": 1000
-  },
+  "healthchecks": [
+    {
+      "id": "websight-cms-http-health",
+      "type": "http",
+      "url": "${CMS_URL}/system/health",
+      "expected_status": 200,
+      "retries": 180,
+      "interval": 1000
+    }
+  ],
   "depend_on": [
     "@java",
     "mongo",

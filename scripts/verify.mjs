@@ -36,8 +36,14 @@ assert(manifest.id === "websight-cms", `Unexpected service id: ${manifest.id}`);
 assert(manifest.execservice === "@java", "Websight CMS must execute through @java.");
 assert(manifest.ports?.service === 8113, "Service port must default to 8113.");
 assert(manifest.ports?.debug === 8115, "Debug port must default to 8115.");
-assert(manifest.healthcheck?.type === "http", "Healthcheck must be HTTP.");
-assert(manifest.healthcheck?.url?.includes("/system/health"), "Healthcheck must target /system/health.");
+assert(!("healthcheck" in manifest), "Manifest must use healthchecks[] instead of singular healthcheck.");
+assert(Array.isArray(manifest.healthchecks), "Manifest must define healthchecks[].");
+assert(manifest.healthchecks.length === 1, "Websight CMS should expose one readiness health check.");
+const [httpHealthCheck] = manifest.healthchecks;
+assert(httpHealthCheck.id === "websight-cms-http-health", "HTTP health check must have a stable id.");
+assert(httpHealthCheck.type === "http", "Health check must be HTTP.");
+assert(httpHealthCheck.url?.includes("/system/health"), "Health check must target /system/health.");
+assert(httpHealthCheck.expected_status === 200, "Health check must expect HTTP 200.");
 for (const dependency of requiredDependencies) {
   assert(manifest.depend_on?.includes(dependency), `Missing dependency: ${dependency}`);
 }
